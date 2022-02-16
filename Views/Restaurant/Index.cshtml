@@ -1,0 +1,55 @@
+@model IEnumerable<RestaurantRaterMVC.Models.Restaurant.RestaurantListItem>
+@{
+    ViewData["Title"] = "Restaurant Index";
+}
+
+<h1>Restaurant Index</h1>
+
+<a asp-action="Create">Create Restaurant</a>
+<!-- Same as line above, but the "old way" <p> @Html.ActionLink("Create Restaurant", "Create") </p> -->
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Score)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <!-- Because scores have a min value of 1, a score of 0 means there are no ratings yet; this logic ensures that only restaurants that have an existing rating will have their average score shown-->
+                    @if (item.Score > 0)
+                    {
+
+                        @Html.DisplayFor(modelItem => item.Score)
+
+                    }
+                    else
+                    {
+                        <span>No Ratings yet</span>
+                    }
+                </td>
+                <td>
+                    <!-- 1""= Text Display on page, 2""= Name of Controller action, 3""= name of the Controller, 4""= route values object -->
+                @Html.ActionLink("Edit", "Edit", "Restaurant", new {id = item.Id})
+                    @Html.ActionLink("Details", "Details", "Restaurant", new {id = item.Id})
+                    @Html.ActionLink("Delete", "Delete", "Restaurant", new {id = item.Id})
+                    <!-- If the other way to do these doesn't show up in the modules, ask again-->
+
+            </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
