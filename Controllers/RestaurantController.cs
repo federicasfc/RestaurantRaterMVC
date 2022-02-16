@@ -20,6 +20,8 @@ namespace RestaurantRaterMVC.Controllers
             _context = context;
         }
 
+        //READ
+
         //Equivalent of GetAll
         //Default GetMethod, could use an [httpGet] annotation if we wanted, but unnecessary
 
@@ -65,6 +67,8 @@ namespace RestaurantRaterMVC.Controllers
 
         }//works
 
+        //CREATE
+
         //Get method for Create
         //Will return the Html form view that we'll use to create restaurants
         public async Task<IActionResult> Create()
@@ -99,6 +103,8 @@ namespace RestaurantRaterMVC.Controllers
 
             return RedirectToAction(nameof(Index)); //When we do n-tier, will we go back to using a bool verification, or does something here render it unnecessary
         }//works
+
+        //UPDATE
 
         //Get for Edit method
         //Like usual, pulls out the restaurant from the db  by id and if it exists, returns the Edit view with the new restaurantEdit info inputed
@@ -142,6 +148,43 @@ namespace RestaurantRaterMVC.Controllers
 
             return RedirectToAction("Details", new { id = restaurant.Id });
         }//works, but still a little unclear on how the get and post are interacting with each other, and why not put.
+
+        //DELETE
+
+        //Get for Delete
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            Restaurant restaurant = await _context.Restaurants.FindAsync(id);
+
+            if (restaurant == null)
+                return RedirectToAction(nameof(Index));
+
+            RestaurantDetail restaurantDetail = new RestaurantDetail()
+            {
+                Id = restaurant.Id,
+                Name = restaurant.Name,
+                Location = restaurant.Location
+            };
+
+            return View(restaurantDetail);
+        }
+
+        //Post for Delete
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id, RestaurantDetail model)
+        {
+            Restaurant restaurant = await _context.Restaurants.FindAsync(model.Id);
+
+            if (restaurant == null)
+                return RedirectToAction(nameof(Index));
+
+            _context.Restaurants.Remove(restaurant);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
 
 
     }

@@ -45,8 +45,9 @@
                 @Html.ActionLink("Edit", "Edit", "Restaurant", new {id = item.Id})
                     @Html.ActionLink("Details", "Details", "Restaurant", new {id = item.Id})
                     @Html.ActionLink("Delete", "Delete", "Restaurant", new {id = item.Id})
-                    <!-- If the other way to do these doesn't show up in the modules, ask again-->
-
+                    <!-- Other way:  <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>  
+                        // item here is coming from our foreach above 
+                        //same as first action link above, test later  -->
             </td>
             </tr>
         }
