@@ -1,0 +1,30 @@
+@model RestaurantRaterMVC.Models.Restaurant.RestaurantCreate
+
+@{
+    ViewData["Title"] = "Create a Restaurant";
+
+}
+
+<h1>Create a Restaurant</h1>
+<hr />
+
+<!--Could also do most of this with @Html thing-- module 3.02 for reference-->
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"> </label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <!--Stopped at Back Button in mod 3.02-->
+            </div>
+        </form>
+    </div>
+</div>
