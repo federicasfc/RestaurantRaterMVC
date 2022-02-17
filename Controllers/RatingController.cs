@@ -44,8 +44,11 @@ namespace RestaurantRaterMVC.Controllers
             .Where(r => r.RestaurantId == id)
             .Select(r => new RatingListItem()
             {
+                Id = r.Id,
                 RestaurantName = r.Restaurant.Name,
-                Score = r.Score
+                Score = r.Score,
+                RestaurantId = r.RestaurantId
+
             }).ToListAsync();
 
             Restaurant restaurant = await _context.Restaurants.FindAsync(id);
@@ -105,15 +108,18 @@ namespace RestaurantRaterMVC.Controllers
         //DELETE ATTEMPT
 
         //Get for Delete
+        //This goes from backend to browser(user)
         public async Task<IActionResult> Delete(int id)
         {
+            //Here: pulling rating by id to be able to package it up into model to show user what they're trying to delete
             Rating rating = await _context.Ratings.Include(r => r.Restaurant).FirstOrDefaultAsync(r => r.Id == id);
 
             RatingListItem ratingListItem = new RatingListItem()
             {
                 Id = rating.Id,
                 RestaurantName = rating.Restaurant.Name,
-                Score = rating.Score
+                Score = rating.Score,
+                RestaurantId = rating.RestaurantId
             };
 
 
@@ -127,15 +133,15 @@ namespace RestaurantRaterMVC.Controllers
 
         public async Task<IActionResult> Delete(RatingListItem model) //remember deleted int id from parameter here and in RestaurantController
         {
-            Rating rating = await _context.Ratings.FindAsync(model.Id);
+            //Here: pulling rating by id again to actually direct the database to the rating we want deleted.
+            Rating rating = await _context.Ratings.FirstOrDefaultAsync(r => r.Id == model.Id);
 
             if (rating == null)
                 return RedirectToAction(nameof(Index)); //change to "Restaurant" ratings later
-
             _context.Ratings.Remove(rating);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index)); //again, probably want to change to display of RatinglistItems for "Restaurant"
+            return RedirectToAction(nameof(Restaurant), new { id = model.RestaurantId }); //again, probably want to change to display of RatinglistItems for "Restaurant"
         }
 
     }

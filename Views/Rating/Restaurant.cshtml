@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = ViewBag.RestaurantName;
+
 }
 
 <h2>Ratings for @ViewBag.RestaurantName</h2>
@@ -25,6 +26,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Score)
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete Rating</a>
             </td>
         </tr>
     }

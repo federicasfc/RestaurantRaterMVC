@@ -18,6 +18,8 @@ namespace RestaurantRaterMVC.Models.Rating
 
         public double Score { get; set; }
 
+        public int RestaurantId { get; set; }
+
 
     }
 }

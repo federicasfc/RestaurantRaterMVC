@@ -1,0 +1,48 @@
+@model RestaurantRaterMVC.Models.Rating.RatingListItem
+@{
+
+    string title = "Delete " + Model.RestaurantName + " Rating";
+    ViewData["Title"] = title;
+
+
+
+}
+<h1>@title</h1>
+<h4>Are you sure you want to delete this @Model.RestaurantName rating? </h4>
+<hr />
+
+<!--making a reference to the RestaurantId, but not visible to users-->
+<div>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RestaurantName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Score)
+            </th>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.RestaurantName)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Score)
+            </td>
+        </tr>
+
+    </table>
+
+    <form asp-action="Delete">
+        @Html.HiddenFor(model => model.RestaurantId);
+        <!--This has to be inside of this form; will not work otherwise; also, pertinent to the Back to restaurant ratings list link, not to the delete input; delete post method pulls id again from db-->
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Restaurant" asp-route-id="@Model.RestaurantId">Back to restaurant ratings List</a>
+    </form>
+</div>
