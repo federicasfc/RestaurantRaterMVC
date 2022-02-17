@@ -100,8 +100,8 @@ namespace RestaurantRaterMVC.Controllers
             _context.Ratings.Add(rating);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
-            //return RedirectToAction("Restaurant", new {id = model.RestaurantId}); -- test this
+            //return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Restaurant), new { id = model.RestaurantId }); // -- test this
         }
 
 
@@ -141,7 +141,7 @@ namespace RestaurantRaterMVC.Controllers
             _context.Ratings.Remove(rating);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Restaurant), new { id = model.RestaurantId }); //again, probably want to change to display of RatinglistItems for "Restaurant"
+            return RedirectToAction(nameof(Restaurant), new { id = model.RestaurantId });
         }
 
     }
