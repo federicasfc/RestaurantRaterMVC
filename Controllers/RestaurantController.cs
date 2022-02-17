@@ -173,7 +173,7 @@ namespace RestaurantRaterMVC.Controllers
         //Post for Delete
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int id, RestaurantDetail model)
+        public async Task<IActionResult> Delete(RestaurantDetail model)
         {
             Restaurant restaurant = await _context.Restaurants.FindAsync(model.Id);
 

@@ -1,0 +1,41 @@
+@model RestaurantRaterMVC.Models.Rating.RatingCreate
+@{
+    string title = "Rate a Restaurant";
+    ViewData["Title"] = title;
+
+
+}
+
+<h1>@title</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div class="form-group">
+                <label asp-for="RestaurantId" class="control-label"></label>
+                @Html.DropDownListFor(r => r.RestaurantId, Model.RestaurantOptions)
+                <!--connects to SelectListItem in Get method and prop in Rating create-->
+                <!--find out later how to do alternate syntax for this; not in mod 9.03-->
+                <span asp-validation-for="RestaurantId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Score" class="control-label"></label>
+                <input asp-for="Score" class="form-control" />
+                <span asp-validation-for="Score" class="text-danger"></span>
+                <!--Mod 9.02 for Html tag versions-->
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Rate!" class="btn btn-primary" />
+            </div>
+        </form>
+
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</div>
+@section Scripts {
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

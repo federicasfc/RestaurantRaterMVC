@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RestaurantRaterMVC.Data;
@@ -54,6 +55,87 @@ namespace RestaurantRaterMVC.Controllers
 
             return View(ratings);
 
+        }
+
+        //CREATE
+
+        //Get Method for Create
+
+        public async Task<IActionResult> Create()
+        {
+            IEnumerable<SelectListItem> restaurantOptions = await _context.Restaurants
+            .Select(r => new SelectListItem()
+            {
+
+                Text = r.Name, //text is what gets displayed
+                Value = r.Id.ToString() //value is a string, so have to convert; also Id is value here because id is fk between tables
+
+            }).ToListAsync();
+
+            RatingCreate model = new RatingCreate();
+            model.RestaurantOptions = restaurantOptions;
+
+            return View(model);  //mod 9.03 for reference
+        }
+
+
+        //Post Method for Create
+
+        [HttpPost]
+
+        public async Task<IActionResult> Create(RatingCreate model)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            Rating rating = new Rating()
+            {
+                RestaurantId = model.RestaurantId,
+                Score = model.Score
+            };
+
+            _context.Ratings.Add(rating);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+            //return RedirectToAction("Restaurant", new {id = model.RestaurantId}); -- test this
+        }
+
+
+        //DELETE ATTEMPT
+
+        //Get for Delete
+        public async Task<IActionResult> Delete(int id)
+        {
+            Rating rating = await _context.Ratings.Include(r => r.Restaurant).FirstOrDefaultAsync(r => r.Id == id);
+
+            RatingListItem ratingListItem = new RatingListItem()
+            {
+                Id = rating.Id,
+                RestaurantName = rating.Restaurant.Name,
+                Score = rating.Score
+            };
+
+
+            return View(ratingListItem);
+
+        }
+
+        //Post for Delete
+
+        [HttpPost]
+
+        public async Task<IActionResult> Delete(RatingListItem model) //remember deleted int id from parameter here and in RestaurantController
+        {
+            Rating rating = await _context.Ratings.FindAsync(model.Id);
+
+            if (rating == null)
+                return RedirectToAction(nameof(Index)); //change to "Restaurant" ratings later
+
+            _context.Ratings.Remove(rating);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index)); //again, probably want to change to display of RatinglistItems for "Restaurant"
         }
 
     }
